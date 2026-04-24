@@ -9,6 +9,7 @@
   var openReportCount = document.querySelector("#open-report-count");
   var boardTbody = document.querySelector("#admin-board-tbody");
   var userTbody = document.querySelector("#admin-user-tbody");
+  var visitLogTbody = document.querySelector("#admin-visit-log-tbody");
   var preregTbody = document.querySelector("#admin-prereg-tbody");
   var NOTICE_KEY = "sinjoseon-notice-board";
   var FREE_KEY = "sinjoseon-free-board";
@@ -100,6 +101,36 @@
           : "<button type='button' class='small-btn user-delete-btn' data-user-id='" + user.userId + "'>회원삭제</button>") +
         "</td>";
       userTbody.appendChild(tr);
+    });
+  }
+
+  function formatDateTime(iso) {
+    var dt = new Date(iso);
+    if (isNaN(dt.getTime())) return "-";
+    return dt.getFullYear() + "-" +
+      String(dt.getMonth() + 1).padStart(2, "0") + "-" +
+      String(dt.getDate()).padStart(2, "0") + " " +
+      String(dt.getHours()).padStart(2, "0") + ":" +
+      String(dt.getMinutes()).padStart(2, "0") + ":" +
+      String(dt.getSeconds()).padStart(2, "0");
+  }
+
+  function renderVisitLogs() {
+    if (!visitLogTbody) return;
+    var logs = window.AuthStore.getVisitLogs().slice(0, 100);
+    visitLogTbody.innerHTML = "";
+    if (!logs.length) {
+      var empty = document.createElement("tr");
+      empty.innerHTML = "<td colspan='2'>접속 로그가 없습니다.</td>";
+      visitLogTbody.appendChild(empty);
+      return;
+    }
+    logs.forEach(function (log) {
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + formatDateTime(log.timestamp) + "</td>" +
+        "<td>" + (log.ip || "확인불가") + "</td>";
+      visitLogTbody.appendChild(tr);
     });
   }
 
@@ -218,12 +249,14 @@
 
   renderBoardTable();
   renderUserTable();
+  renderVisitLogs();
   renderPreregTable();
   refreshStats();
 
   window.addEventListener("storage", function () {
     renderBoardTable();
     renderUserTable();
+    renderVisitLogs();
     renderPreregTable();
     refreshStats();
   });

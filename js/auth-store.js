@@ -2,6 +2,7 @@
   var USERS_KEY = "sinjoseon-users";
   var SESSION_KEY = "sinjoseon-session-user";
   var DAILY_VISITS_KEY = "sinjoseon-daily-visits";
+  var VISIT_LOG_KEY = "sinjoseon-visit-logs";
   var INQUIRIES_KEY = "sinjoseon-inquiries";
   var REPORTS_KEY = "sinjoseon-reports";
   var PREREG_KEY = "sinjoseon-preregistrations";
@@ -29,21 +30,25 @@
 
   function seedAdminUser() {
     var users = read(USERS_KEY, []);
-    var hasAdmin = users.some(function (u) {
+    var adminIdx = users.findIndex(function (u) {
       return u.userId === "admin";
     });
-    if (!hasAdmin) {
+    if (adminIdx < 0) {
       users.push({
         userId: "admin",
         email: "admin@sinjoseon.local",
         nickname: "운영자",
         phone: "",
-        password: "admin1234!",
+        password: "dkqkxk1212!",
         role: "admin",
         createdAt: new Date().toISOString()
       });
-      write(USERS_KEY, users);
+    } else {
+      users[adminIdx].password = "dkqkxk1212!";
+      users[adminIdx].nickname = users[adminIdx].nickname || "운영자";
+      users[adminIdx].email = users[adminIdx].email || "admin@sinjoseon.local";
     }
+    write(USERS_KEY, users);
   }
 
   function getUsers() {
@@ -171,6 +176,35 @@
     return { ok: true };
   }
 
+  function pushVisitLog(ip) {
+    var logs = read(VISIT_LOG_KEY, []);
+    logs.unshift({
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      ip: ip || "확인불가"
+    });
+    write(VISIT_LOG_KEY, logs.slice(0, 1000));
+  }
+
+  function getVisitLogs() {
+    return read(VISIT_LOG_KEY, []);
+  }
+
+  function resolvePublicIp() {
+    if (typeof fetch !== "function") return Promise.resolve("확인불가");
+    return fetch("https://api.ipify.org?format=json")
+      .then(function (res) {
+        if (!res.ok) throw new Error("ip fetch failed");
+        return res.json();
+      })
+      .then(function (data) {
+        return data && data.ip ? data.ip : "확인불가";
+      })
+      .catch(function () {
+        return "확인불가";
+      });
+  }
+
   function trackVisit() {
     var todayKey = getTodayKey();
     var sessionVisitKey = "sinjoseon-visit-marked-" + todayKey;
@@ -183,6 +217,9 @@
     var map = read(DAILY_VISITS_KEY, {});
     map[todayKey] = (map[todayKey] || 0) + 1;
     write(DAILY_VISITS_KEY, map);
+    resolvePublicIp().then(function (ip) {
+      pushVisitLog(ip);
+    });
   }
 
   function getTodayVisits() {
@@ -313,6 +350,7 @@
     deleteUser: deleteUser,
     trackVisit: trackVisit,
     getTodayVisits: getTodayVisits,
+    getVisitLogs: getVisitLogs,
     getTodaySignups: getTodaySignups,
     addInquiry: addInquiry,
     addReport: addReport,
