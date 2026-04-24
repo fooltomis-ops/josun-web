@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>신조선 내 계정 관리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <main class="auth-wrap">
+    <section class="auth-card">
+      <a class="back-home" href="index.html">홈으로 돌아가기</a>
+      <h1 class="page-title">내 계정 관리</h1>
+      <p id="account-user" class="page-subtitle"></p>
+
+      <form id="change-password-form" class="signup-form-detail">
+        <label for="current-password">현재 비밀번호</label>
+        <input id="current-password" type="password" required placeholder="현재 비밀번호" />
+        <label for="next-password">새 비밀번호</label>
+        <input id="next-password" type="password" required placeholder="영문/숫자/특수문자 포함 8자 이상" />
+        <label for="next-password-check">새 비밀번호 확인</label>
+        <input id="next-password-check" type="password" required placeholder="새 비밀번호 재입력" />
+        <button type="submit" class="primary-btn">비밀번호 변경</button>
+      </form>
+
+      <hr class="divider-line" />
+
+      <form id="delete-account-form" class="signup-form-detail">
+        <label for="delete-confirm">탈퇴 확인 문구 입력</label>
+        <input id="delete-confirm" type="text" placeholder="탈퇴하려면 '탈퇴' 입력" required />
+        <button type="submit" class="danger-btn">회원 탈퇴</button>
+      </form>
+
+      <p id="account-note" class="auth-note" aria-live="polite"></p>
+    </section>
+  </main>
+  <script src="js/auth-store.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>

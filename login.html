@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>신조선 로그인</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <main class="auth-wrap">
+    <section class="auth-card">
+      <a class="back-home" href="index.html">홈으로 돌아가기</a>
+      <h1 class="brand">신조선</h1>
+
+      <div class="auth-tabs" role="tablist" aria-label="로그인 방식">
+        <button class="auth-tab is-active" data-target="id-email" role="tab" type="button">아이디/이메일</button>
+        <button class="auth-tab" data-target="phone" role="tab" type="button">전화번호</button>
+        <button class="auth-tab" data-target="qrcode" role="tab" type="button">QR코드</button>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <div class="auth-pane is-active" id="id-email">
+          <input type="text" name="account" placeholder="아이디 또는 이메일" required />
+          <input type="password" name="password" placeholder="비밀번호" required />
+        </div>
+        <div class="auth-pane" id="phone">
+          <input type="tel" name="phone" placeholder="휴대폰 번호 입력" />
+        </div>
+        <div class="auth-pane" id="qrcode">
+          <input type="text" name="qrcode" placeholder="QR 로그인 준비 중" disabled />
+        </div>
+        <button class="primary-btn" type="submit">다음</button>
+        <p id="login-note" class="auth-note" aria-live="polite"></p>
+      </form>
+
+      <div class="auth-links">
+        <a href="recover.html">계정 찾기</a>
+        <a href="recover.html">비밀번호 찾기</a>
+        <a href="account.html">내 계정</a>
+        <a href="signup.html">회원가입</a>
+      </div>
+
+      <p class="social-title">다른 계정으로 바로 시작</p>
+      <div class="social-grid">
+        <button type="button" aria-label="Google 로그인">G</button>
+        <button type="button" aria-label="Facebook 로그인">f</button>
+        <button type="button" aria-label="Apple 로그인">A</button>
+        <button type="button" aria-label="Twitter 로그인">X</button>
+        <button type="button" aria-label="LINE 로그인">L</button>
+        <button type="button" aria-label="Steam 로그인">S</button>
+      </div>
+    </section>
+  </main>
+  <script src="js/auth-store.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

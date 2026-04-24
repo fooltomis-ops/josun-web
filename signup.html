@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>신조선 회원가입</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <main class="auth-wrap">
+    <section class="auth-card signup-select">
+      <a class="back-home" href="index.html">홈으로 돌아가기</a>
+      <h1 class="page-title">회원가입</h1>
+      <p class="page-subtitle">회원가입 수단을 선택해 주세요.</p>
+
+      <div class="signup-options">
+        <button type="button" class="signup-method is-active" data-method="email">이메일로 회원가입</button>
+        <button type="button" class="signup-method" data-method="phone">전화번호로 회원가입</button>
+      </div>
+
+      <p class="divider">또는</p>
+
+      <div class="signup-options social-options">
+        <button type="button">Google로 회원가입</button>
+        <button type="button">Facebook으로 회원가입</button>
+        <button type="button">Apple로 회원가입</button>
+        <button type="button">Twitter로 회원가입</button>
+        <button type="button">LINE으로 회원가입</button>
+        <button type="button">Steam으로 회원가입</button>
+      </div>
+
+      <form id="signup-form" class="signup-form-detail">
+        <label for="signup-user-id">계정명</label>
+        <div class="inline-field">
+          <input id="signup-user-id" name="userId" type="text" minlength="4" maxlength="16" required placeholder="영문/숫자 4~16자" />
+          <button type="button" id="check-id-btn" class="inline-btn">중복확인</button>
+        </div>
+
+        <label for="signup-email">이메일</label>
+        <div class="inline-field">
+          <input id="signup-email" name="email" type="email" required placeholder="example@email.com" />
+          <button type="button" id="check-email-btn" class="inline-btn">중복확인</button>
+        </div>
+
+        <label for="signup-phone">전화번호(선택)</label>
+        <input id="signup-phone" name="phone" type="tel" placeholder="01012345678" />
+
+        <label for="signup-nickname">닉네임</label>
+        <input id="signup-nickname" name="nickname" type="text" minlength="2" maxlength="12" required placeholder="게임 내 닉네임" />
+
+        <label for="signup-password">비밀번호</label>
+        <input id="signup-password" name="password" type="password" minlength="8" required placeholder="영문/숫자/특수문자 포함 8자 이상" />
+
+        <label for="signup-password-check">비밀번호 확인</label>
+        <input id="signup-password-check" name="passwordCheck" type="password" minlength="8" required placeholder="비밀번호 재입력" />
+
+        <button type="submit" class="primary-btn">가입 완료</button>
+      </form>
+
+      <p id="signup-note" class="auth-note" aria-live="polite"></p>
+      <p class="to-login">이미 계정이 있나요? <a href="login.html">로그인</a></p>
+    </section>
+  </main>
+
+  <script src="js/auth-store.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

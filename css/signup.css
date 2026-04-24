@@ -1,0 +1,121 @@
+:root {
+  --bg: #080a10;
+  --card: #121722;
+  --line: rgba(255, 255, 255, 0.12);
+  --text: #f0ebe3;
+  --muted: #9a958a;
+  --accent: #e8b84a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Noto Sans KR", system-ui, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(74, 111, 165, 0.25), transparent 40%),
+    radial-gradient(circle at bottom, rgba(139, 41, 66, 0.2), transparent 35%),
+    var(--bg);
+}
+
+.signup-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+}
+
+.signup-card {
+  width: min(100%, 460px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.4rem 1.2rem 1.3rem;
+}
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.86rem;
+}
+
+.back-link:hover {
+  color: var(--text);
+}
+
+h1 {
+  margin: 0.55rem 0 0.15rem;
+  font-family: "Gowun Batang", serif;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.signup-form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.signup-form label {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.signup-form input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #0f141d;
+  color: var(--text);
+  border-radius: 7px;
+  padding: 0.66rem 0.75rem;
+  font: inherit;
+}
+
+.signup-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(232, 184, 74, 0.2);
+}
+
+.agree {
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.agree input {
+  width: auto;
+}
+
+.agree span {
+  font-size: 0.82rem;
+}
+
+.signup-form button {
+  margin-top: 0.35rem;
+  border: 1px solid rgba(232, 184, 74, 0.45);
+  border-radius: 7px;
+  padding: 0.66rem 0.85rem;
+  background: linear-gradient(180deg, #e8b84a, #a77b22);
+  color: #181208;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.signup-note {
+  margin: 0.35rem 0 0;
+  min-height: 1.3em;
+  color: var(--accent);
+  font-size: 0.84rem;
+}

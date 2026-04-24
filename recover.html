@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>신조선 계정 복구</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <main class="auth-wrap">
+    <section class="auth-card">
+      <a class="back-home" href="login.html">로그인으로 돌아가기</a>
+      <h1 class="page-title">계정/비밀번호 찾기</h1>
+      <p class="page-subtitle">가입한 정보를 입력해 계정을 찾거나 비밀번호를 재설정하세요.</p>
+
+      <form id="find-account-form" class="signup-form-detail">
+        <label for="find-email">이메일로 계정 찾기</label>
+        <input id="find-email" type="email" required placeholder="가입한 이메일 입력" />
+        <button type="submit" class="primary-btn">계정 찾기</button>
+      </form>
+
+      <hr class="divider-line" />
+
+      <form id="reset-password-form" class="signup-form-detail">
+        <label for="reset-user-id">계정명</label>
+        <input id="reset-user-id" type="text" required placeholder="계정명" />
+        <label for="reset-email">이메일</label>
+        <input id="reset-email" type="email" required placeholder="가입 이메일" />
+        <label for="reset-password">새 비밀번호</label>
+        <input id="reset-password" type="password" required placeholder="영문/숫자/특수문자 포함 8자 이상" />
+        <label for="reset-password-check">새 비밀번호 확인</label>
+        <input id="reset-password-check" type="password" required placeholder="새 비밀번호 재입력" />
+        <button type="submit" class="primary-btn">비밀번호 재설정</button>
+      </form>
+
+      <p id="recover-note" class="auth-note" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="js/auth-store.js"></script>
+  <script src="js/recover.js"></script>
+</body>
+</html>
