@@ -4,8 +4,12 @@
   var logoutBtn = document.querySelector(".logout-btn");
   var adminUserLabel = document.querySelector("#admin-user-label");
   var newUsersCount = document.querySelector("#new-users-count");
+  var todayVisitsCount = document.querySelector("#today-visits-count");
+  var pendingInquiryCount = document.querySelector("#pending-inquiry-count");
+  var openReportCount = document.querySelector("#open-report-count");
   var boardTbody = document.querySelector("#admin-board-tbody");
   var userTbody = document.querySelector("#admin-user-tbody");
+  var preregTbody = document.querySelector("#admin-prereg-tbody");
   var NOTICE_KEY = "sinjoseon-notice-board";
   var FREE_KEY = "sinjoseon-free-board";
 
@@ -21,11 +25,19 @@
     adminUserLabel.textContent = sessionUser.nickname + "(" + sessionUser.userId + ")";
   }
 
-  if (newUsersCount) {
-    var users = window.AuthStore.getUsers().filter(function (u) {
-      return u.role !== "admin";
-    });
-    newUsersCount.textContent = String(users.length);
+  function refreshStats() {
+    if (todayVisitsCount) {
+      todayVisitsCount.textContent = String(window.AuthStore.getTodayVisits());
+    }
+    if (newUsersCount) {
+      newUsersCount.textContent = String(window.AuthStore.getTodaySignups());
+    }
+    if (pendingInquiryCount) {
+      pendingInquiryCount.textContent = String(window.AuthStore.getPendingInquiryCount());
+    }
+    if (openReportCount) {
+      openReportCount.textContent = String(window.AuthStore.getOpenReportCount());
+    }
   }
 
   function getItems(key) {
@@ -91,6 +103,40 @@
     });
   }
 
+  function renderPreregTable() {
+    if (!preregTbody) return;
+    var list = window.AuthStore.getPreregistrations();
+    preregTbody.innerHTML = "";
+    if (!list.length) {
+      var empty = document.createElement("tr");
+      empty.innerHTML = "<td colspan='5'>접수된 지원자가 없습니다.</td>";
+      preregTbody.appendChild(empty);
+      return;
+    }
+    list.forEach(function (item) {
+      var createdText = "-";
+      if (item.createdAt) {
+        var dt = new Date(item.createdAt);
+        if (!isNaN(dt.getTime())) {
+          createdText = dt.getFullYear() + "-" +
+            String(dt.getMonth() + 1).padStart(2, "0") + "-" +
+            String(dt.getDate()).padStart(2, "0") + " " +
+            String(dt.getHours()).padStart(2, "0") + ":" +
+            String(dt.getMinutes()).padStart(2, "0") + ":" +
+            String(dt.getSeconds()).padStart(2, "0");
+        }
+      }
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + item.name + "</td>" +
+        "<td>" + item.email + "</td>" +
+        "<td>" + item.phone + "</td>" +
+        "<td>" + createdText + "</td>" +
+        "<td><button type='button' class='small-btn prereg-delete-btn' data-id='" + item.id + "'>삭제</button></td>";
+      preregTbody.appendChild(tr);
+    });
+  }
+
   if (boardTbody) {
     boardTbody.addEventListener("click", function (e) {
       var target = e.target;
@@ -125,12 +171,19 @@
         return;
       }
       renderUserTable();
-      if (newUsersCount) {
-        var users = window.AuthStore.getUsers().filter(function (u) {
-          return u.role !== "admin";
-        });
-        newUsersCount.textContent = String(users.length);
-      }
+      refreshStats();
+    });
+  }
+
+  if (preregTbody) {
+    preregTbody.addEventListener("click", function (e) {
+      var target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (!target.classList.contains("prereg-delete-btn")) return;
+      var id = target.getAttribute("data-id");
+      if (!id) return;
+      window.AuthStore.deletePreregistration(id);
+      renderPreregTable();
     });
   }
 
@@ -153,6 +206,7 @@
     note.textContent = "공지사항이 등록되었습니다.";
     form.reset();
     renderBoardTable();
+    refreshStats();
   });
 
   if (logoutBtn) {
@@ -164,4 +218,13 @@
 
   renderBoardTable();
   renderUserTable();
+  renderPreregTable();
+  refreshStats();
+
+  window.addEventListener("storage", function () {
+    renderBoardTable();
+    renderUserTable();
+    renderPreregTable();
+    refreshStats();
+  });
 })();

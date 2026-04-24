@@ -108,6 +108,14 @@
       var items = getItems(key);
       items.unshift({ author: author, title: title });
       saveItems(key, items.slice(0, 30));
+      if (window.AuthStore && key === FREE_KEY) {
+        if (title.indexOf("문의") >= 0) {
+          window.AuthStore.addInquiry({ title: title, author: author });
+        }
+        if (title.indexOf("신고") >= 0) {
+          window.AuthStore.addReport({ title: title, author: author });
+        }
+      }
       renderBoard(key, listEl, emptyEl, type);
       formEl.reset();
     });

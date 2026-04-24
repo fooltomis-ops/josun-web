@@ -25,23 +25,23 @@
     <section class="stats-grid">
       <article class="stat-card">
         <h2>오늘 접속자</h2>
-        <p class="value">12,840</p>
-        <span class="delta up">+8.2%</span>
+        <p class="value" id="today-visits-count">0</p>
+        <span class="delta" id="today-visits-delta">실시간</span>
       </article>
       <article class="stat-card">
         <h2>신규 가입</h2>
         <p class="value" id="new-users-count">0</p>
-        <span class="delta up">+3.5%</span>
+        <span class="delta" id="new-users-delta">오늘 기준</span>
       </article>
       <article class="stat-card">
         <h2>미처리 문의</h2>
-        <p class="value">27</p>
-        <span class="delta down">-4건</span>
+        <p class="value" id="pending-inquiry-count">0</p>
+        <span class="delta" id="pending-inquiry-delta">대기중</span>
       </article>
       <article class="stat-card">
         <h2>신고 게시글</h2>
-        <p class="value">14</p>
-        <span class="delta">검토 필요</span>
+        <p class="value" id="open-report-count">0</p>
+        <span class="delta" id="open-report-delta">검토 필요</span>
       </article>
     </section>
 
@@ -107,6 +107,26 @@
             </tr>
           </thead>
           <tbody id="admin-user-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>사전이벤트 지원자 목록</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>이름</th>
+              <th>이메일</th>
+              <th>연락처</th>
+              <th>접수일</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="admin-prereg-tbody"></tbody>
         </table>
       </div>
     </section>

@@ -267,6 +267,28 @@ body {
   cursor: pointer;
 }
 
+.email-field {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.email-field span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.email-field select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #0e131d;
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.72rem 0.72rem;
+  font: inherit;
+}
+
 .divider-line {
   border: 0;
   border-top: 1px solid var(--line);

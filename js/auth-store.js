@@ -1,6 +1,10 @@
 (function (global) {
   var USERS_KEY = "sinjoseon-users";
   var SESSION_KEY = "sinjoseon-session-user";
+  var DAILY_VISITS_KEY = "sinjoseon-daily-visits";
+  var INQUIRIES_KEY = "sinjoseon-inquiries";
+  var REPORTS_KEY = "sinjoseon-reports";
+  var PREREG_KEY = "sinjoseon-preregistrations";
 
   function read(key, fallback) {
     try {
@@ -13,6 +17,14 @@
 
   function write(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function getTodayKey() {
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = String(now.getMonth() + 1).padStart(2, "0");
+    var d = String(now.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + d;
   }
 
   function seedAdminUser() {
@@ -159,6 +171,106 @@
     return { ok: true };
   }
 
+  function trackVisit() {
+    var todayKey = getTodayKey();
+    var sessionVisitKey = "sinjoseon-visit-marked-" + todayKey;
+    try {
+      if (sessionStorage.getItem(sessionVisitKey)) return;
+      sessionStorage.setItem(sessionVisitKey, "1");
+    } catch (err) {
+      // ignore session storage errors
+    }
+    var map = read(DAILY_VISITS_KEY, {});
+    map[todayKey] = (map[todayKey] || 0) + 1;
+    write(DAILY_VISITS_KEY, map);
+  }
+
+  function getTodayVisits() {
+    var map = read(DAILY_VISITS_KEY, {});
+    return map[getTodayKey()] || 0;
+  }
+
+  function getTodaySignups() {
+    var today = getTodayKey();
+    return getUsers().filter(function (u) {
+      if (u.role === "admin" || !u.createdAt) return false;
+      return String(u.createdAt).slice(0, 10) === today;
+    }).length;
+  }
+
+  function addInquiry(item) {
+    var arr = read(INQUIRIES_KEY, []);
+    arr.unshift({
+      id: Date.now(),
+      status: "pending",
+      createdAt: new Date().toISOString(),
+      title: item.title || "",
+      author: item.author || ""
+    });
+    write(INQUIRIES_KEY, arr.slice(0, 200));
+  }
+
+  function addReport(item) {
+    var arr = read(REPORTS_KEY, []);
+    arr.unshift({
+      id: Date.now(),
+      status: "open",
+      createdAt: new Date().toISOString(),
+      title: item.title || "",
+      author: item.author || ""
+    });
+    write(REPORTS_KEY, arr.slice(0, 200));
+  }
+
+  function getPendingInquiryCount() {
+    return read(INQUIRIES_KEY, []).filter(function (x) {
+      return x.status === "pending";
+    }).length;
+  }
+
+  function getOpenReportCount() {
+    return read(REPORTS_KEY, []).filter(function (x) {
+      return x.status === "open";
+    }).length;
+  }
+
+  function addPreregistration(payload) {
+    var name = String(payload.name || "").trim();
+    var email = String(payload.email || "").trim().toLowerCase();
+    var phone = String(payload.phone || "").trim();
+    if (!name || !email || !phone) {
+      return { ok: false, message: "이름, 이메일, 연락처를 모두 입력해 주세요." };
+    }
+    var list = read(PREREG_KEY, []);
+    var exists = list.some(function (x) {
+      return x.email === email;
+    });
+    if (exists) {
+      return { ok: false, message: "이미 접수된 이메일입니다." };
+    }
+    list.unshift({
+      id: Date.now(),
+      name: name,
+      email: email,
+      phone: phone,
+      createdAt: new Date().toISOString()
+    });
+    write(PREREG_KEY, list.slice(0, 500));
+    return { ok: true };
+  }
+
+  function getPreregistrations() {
+    return read(PREREG_KEY, []);
+  }
+
+  function deletePreregistration(id) {
+    var list = read(PREREG_KEY, []);
+    var next = list.filter(function (x) {
+      return String(x.id) !== String(id);
+    });
+    write(PREREG_KEY, next);
+  }
+
   function login(account, password) {
     var query = String(account).trim().toLowerCase();
     var users = getUsers();
@@ -187,6 +299,7 @@
   }
 
   seedAdminUser();
+  trackVisit();
 
   global.AuthStore = {
     getUsers: getUsers,
@@ -198,6 +311,16 @@
     resetPassword: resetPassword,
     changePassword: changePassword,
     deleteUser: deleteUser,
+    trackVisit: trackVisit,
+    getTodayVisits: getTodayVisits,
+    getTodaySignups: getTodaySignups,
+    addInquiry: addInquiry,
+    addReport: addReport,
+    getPendingInquiryCount: getPendingInquiryCount,
+    getOpenReportCount: getOpenReportCount,
+    addPreregistration: addPreregistration,
+    getPreregistrations: getPreregistrations,
+    deletePreregistration: deletePreregistration,
     login: login,
     logout: logout,
     getSessionUser: getSessionUser
